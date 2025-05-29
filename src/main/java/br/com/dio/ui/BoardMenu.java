@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public class BoardMenu {
-    public BoardMenu(BoardEntity entity) {
-    }
+   private final BoardEntity entity;
 
     public void execute() {
+        System.out.printf("Bem vindo ao board %s, selecione a opção desejada:", entity.getId());
     }
 }

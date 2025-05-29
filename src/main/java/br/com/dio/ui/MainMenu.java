@@ -71,34 +71,34 @@ public class MainMenu {
 
     private void createBoard() throws SQLException{
         var entity = new BoardEntity();
-        System.out.println("Informe o nome do seu board:");
-        var name = sc.nextLine();
-        entity.setName(name);
+        System.out.println("Informe o nome do seu board: ");
+        entity.setName(sc.next());
 
-        System.out.println("Seu board terá colunas além das 3 padrões? Se sim, informar quantas, se não digite 0");
+        System.out.println("Seu board terá colunas além das 3 padrões? Se sim, informar quantas, se não digite 0... ");
         var colunas = sc.nextInt();
 
         List<BoardColumnEntity> columns = new ArrayList<>();
-        System.out.print("Informe o nome da  coluna inicial do board: ");
+
+        System.out.println("Informe o nome da  coluna inicial do board: ");
         var initialComunName = sc.next();
-        var inicialColumn = createColumn(initialComunName, BoardColumnKindEnum.INITIAL, 0);
-        columns.add(inicialColumn);
+        var initialColumn = createColumn(initialComunName, BoardColumnKindEnum.INITIAL, 0);
+        columns.add(initialColumn);
 
         for(int i = 0; i < colunas; i++) {
-            System.out.print("Informe o nome da coluna de tarefa pendente do board: ");
+            System.out.println("Informe o nome da coluna de tarefa pendente do board: ");
             var pendingColumnName = sc.next();
             var pendingColumn = createColumn(pendingColumnName, BoardColumnKindEnum.PENDING, i + 1);
             columns.add(pendingColumn);
         }
 
-        System.out.print("Informe o nome da coluna final: ");
+        System.out.println("Informe o nome da coluna final: ");
         var finalColumnName = sc.next();
         var finalColumn = createColumn(finalColumnName, BoardColumnKindEnum.FINAL, colunas + 1);
         columns.add(finalColumn);
 
-        System.out.print("Informe o nome da coluna de cancelamento do baord: ");
+        System.out.println("Informe o nome da coluna de cancelamento do baord: ");
         var cancelColumnName = sc.next();
-        var cancelColumn = createColumn(cancelColumnName, BoardColumnKindEnum.CANCEL, colunas + 1);
+        var cancelColumn = createColumn(cancelColumnName, BoardColumnKindEnum.CANCEL, colunas + 2);
         columns.add(cancelColumn);
 
         entity.setBoardColumns(columns);

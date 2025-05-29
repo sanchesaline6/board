@@ -2,11 +2,9 @@ package br.com.dio.persistence.dao;
 
 import br.com.dio.persistence.entity.BoardColumnEntity;
 import br.com.dio.persistence.entity.BoardColumnKindEnum;
-import br.com.dio.persistence.entity.BoardEntity;
 import lombok.AllArgsConstructor;
 
 import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,30 +15,30 @@ public class BoardColumnDAO {
 
     private final Connection connection;
 
-    public BoardColumnEntity insert (final BoardColumnEntity entity) throws SQLException {
-        var sql = "INSERT INTO boards_columns (name, order, kind, board_id) VALUES (?, ?, ?, ?);";
+    public BoardColumnEntity insert(final BoardColumnEntity entity) throws SQLException {
+        String sql = "INSERT INTO boards_columns (name, order, kind, board_id) VALUES (?, ?, ?, ?)";
 
-        try(var statement = connection.prepareStatement(sql)) {
-            statement.setString(1, entity.getName());
-            statement.setInt(2, entity.getOrder());
-            statement.setString(3, entity.getKind().name());
-            statement.setLong(4, entity.getBoard().getId());
+        try (var statement = connection.prepareStatement(sql)) {
+            statement.setString(2, entity.getName());
+            statement.setInt(3, entity.getOrder());
+            statement.setString(4, entity.getKind().name());
+            statement.setLong(1, entity.getBoard().getId());
             statement.executeUpdate();
-
-            ResultSet rs = statement.getGeneratedKeys();
-            if (rs.next()) {
-                entity.setId(rs.getLong(1)); // Retrieve the generated ID
-            }
-
+            System.out.println(statement.getResultSet().toString());
+            entity.setId(statement.getResultSet().getLong("id"));
+            System.out.println(entity.getId());
+            return entity;
         }
-        return entity;
+
+
     }
 
-    public Optional<BoardColumnEntity> findById(final Long id) throws SQLException{
+
+    public Optional<BoardColumnEntity> findById(final Long boardId) throws SQLException{
         var sql = "SELECT id, name FROM boards_columns WHERE id = ?";
 
         try(var statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, id);
+            statement.setLong(1, boardId);
             statement.executeQuery();
 
             var resultSet = statement.getResultSet();
@@ -76,12 +74,12 @@ public class BoardColumnDAO {
         }
     }
 
-    public List<BoardColumnEntity> findByBoardId(Long id) throws SQLException{
+    public List<BoardColumnEntity> findByBoardId(final Long boardId) throws SQLException{
         List<BoardColumnEntity> entities = new ArrayList<>();
-        var sql = "SELECT id, name, \"order\" FROM boards_columns WHERE board_id = ? ORDER BY \"order\" ";
+        var sql = "SELECT id, name, \"order\", kind FROM boards_columns WHERE board_id = ? ORDER BY \"order\" ";
 
         try(var statement = connection.prepareStatement(sql)) {
-            statement.setLong(1, id);
+            statement.setLong(1, boardId);
             statement.executeQuery();
 
             var resultSet = statement.getResultSet();

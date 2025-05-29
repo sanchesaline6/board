@@ -1,6 +1,7 @@
 package br.com.dio.persistence.entity;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
 public class BoardColumnEntity {
